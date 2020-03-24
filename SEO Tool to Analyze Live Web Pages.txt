@@ -1,0 +1,30 @@
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+from collections import Counter
+
+key=input("Enter a list of keywords to search:")
+l=[]
+for i in key.split():
+    l.append(i)
+print("Searching...")
+fo=open("F:\\Python\\Anaconda_Smitha\\NIIT Practice Programs\\URL.txt","r")
+for line in fo:
+    url=line.strip()
+    a=urlopen(url)
+    content=a.read()
+    soup=BeautifulSoup(content)
+    for script in soup(["script","style"]):
+        script.extract()
+    text_content=soup.get_text().split()
+
+    word_dict={}
+ 
+    for x in text_content:
+        word_dict.update({x:text_content.count(x)})
+
+    for word,number in word_dict.items():
+        for y in l:
+            if(y==word):
+                with open('out_file.txt', 'a') as f:
+                    print("In URL:",url,",Keyword **",word,"** is found ", number,"times",file=f)
+print("The output is saved in a file named out_file.txt")
